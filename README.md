@@ -7,10 +7,10 @@ flaggie net-p2p/solang +BSD-2-Clause +BSD-3-Clause +BSL-1.0 +LLVM-exception +WIT
 emerge solang
 ```
 ## Container
-https://github.com/Matthias-Fauconneau/kubler
+https://github.com/Matthias-Fauconneau/kubler-solang
 ```sh
-git clone https://github.com/Matthias-Fauconneau/kubler.git
-cd kubler
+git clone https://github.com/Matthias-Fauconneau/kubler-solang.git
+cd kubler-solang
 kubler build solang
 docker run solang
 ```
