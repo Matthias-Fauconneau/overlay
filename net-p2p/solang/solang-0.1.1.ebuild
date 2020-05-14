@@ -249,7 +249,7 @@ winreg-0.6.2
 ws2_32-sys-0.2.1
 "
 
-inherit cargo
+inherit cargo llvm
 
 DESCRIPTION="Solang Solidity Compiler"
 # Double check the homepage as the cargo_metadata crate
@@ -264,15 +264,10 @@ SLOT="0"
 KEYWORDS="~amd64"
 IUSE=""
 
-DEPEND="sys-devel/llvm:8[llvm_targets_WebAssembly]"
-RDEPEND=""
+RDEPEND="sys-devel/llvm:8[llvm_targets_WebAssembly]"
+DEPEND=${RDEPEND}
+LLVM_MAX_SLOT=8
 
-# Build the package using cargo rustc
-src_compile() {
-    debug-print-function ${FUNCNAME} "$@"
-
-    export CARGO_HOME="${ECARGO_HOME}"
-
-    cargo rustc $(usex debug "" --release) --bin solang -- $(llvm-config --libs) "$@" \
-        || die "cargo rustc failed"
-}
+PATCHES=(
+	"${FILESDIR}/${P}-llvm.patch"
+)
