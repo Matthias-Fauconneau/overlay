@@ -267,5 +267,15 @@ SLOT="0"
 KEYWORDS="~amd64"
 IUSE=""
 
-DEPEND=""
+DEPEND="sys-devel/llvm:8[llvm_targets_WebAssembly]"
 RDEPEND=""
+
+# Build the package using cargo rustc
+src_compile() {
+    debug-print-function ${FUNCNAME} "$@"
+
+    export CARGO_HOME="${ECARGO_HOME}"
+
+    cargo rustc $(usex debug "" --release) --bin solang -- $(llvm-config --libs) "$@" \
+        || die "cargo rustc failed"
+}
