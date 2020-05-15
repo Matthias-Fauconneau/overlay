@@ -13,7 +13,7 @@ index 0233ade..5288d92 100644
          .unwrap();
      let git_hash = String::from_utf8(output.stdout).unwrap();
      println!("cargo:rustc-env=GIT_HASH={}", git_hash);
-+    let cmd = String::from_utf8(Command::new("llvm-config").arg("--libs").stderr(Stdio::inherit()).output().unwrap().stdout).unwrap();
++    let cmd = String::from_utf8(Command::new("/usr/lib/llvm/8/bin/llvm-config").arg("--libs").stderr(Stdio::inherit()).output().unwrap().stdout).unwrap();
 +    for lib in cmd.split_whitespace() {
 +        println!("cargo:rustc-link-lib={}", &lib[2..]);
 +    }
