@@ -11,6 +11,5 @@ https://github.com/Matthias-Fauconneau/kubler-solang
 ```sh
 git clone https://github.com/Matthias-Fauconneau/kubler-solang.git
 cd kubler-solang
-kubler build solang
-docker run solang
+cat images/solang/README.md
 ```
