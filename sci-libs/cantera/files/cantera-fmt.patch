@@ -1,0 +1,13 @@
+diff --git a/include/cantera/base/fmt.h b/include/cantera/base/fmt.h
+index 68c0cfa3c..6036a776c 100644
+--- a/include/cantera/base/fmt.h
++++ b/include/cantera/base/fmt.h
+@@ -7,6 +7,8 @@
+ //! the same name in kinetics/Group.h
+ #define FMT_NO_FMT_STRING_ALIAS
+ 
++#define FMT_HEADER_ONLY
++
+ //! Versions 6.2.0 and 6.2.1 of fmtlib do not include this define before they
+ //! include windows.h, breaking builds on Windows. Fixed in fmtlib 7.0.0 and
+ //! newer. https://github.com/fmtlib/fmt/pull/1616
