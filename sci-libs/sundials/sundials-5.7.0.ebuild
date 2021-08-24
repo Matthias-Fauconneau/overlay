@@ -1,4 +1,4 @@
-# Copyright 1999-2020 Gentoo Authors
+# Copyright 1999-2021 Gentoo Authors
 # Distributed under the terms of the GNU General Public License v2
 
 EAPI=7
@@ -8,16 +8,16 @@ FORTRAN_NEEDED=fortran
 FORTRAN_STANDARD="77 90"
 # if FFLAGS and FCFLAGS are set then should be equal
 
-inherit cmake fortran-2 toolchain-funcs
+inherit cmake fortran-2 toolchain-funcs flag-o-matic
 
 DESCRIPTION="Suite of nonlinear solvers"
 HOMEPAGE="https://computation.llnl.gov/projects/sundials"
-SRC_URI="https://computation.llnl.gov/projects/sundials/download/${P}.tar.gz"
+SRC_URI="https://github.com/LLNL/${PN}/releases/download/v${PV}/${P}.tar.gz"
 
 LICENSE="BSD"
 SLOT="0/$(ver_cut 1)"
-#KEYWORDS="amd64 ~arm ~arm64 ~ppc ~ppc64 ~x86 ~amd64-linux ~x86-linux"
-IUSE="cxx doc examples fortran hypre lapack mpi openmp sparse static-libs superlumt threads raja hip cuda"
+KEYWORDS="~amd64 ~arm ~arm64 ~ppc ~ppc64 ~x86 ~amd64-linux ~x86-linux"
+IUSE="cxx doc examples fortran hypre lapack mpi openmp sparse static-libs superlumt threads sycl"
 REQUIRED_USE="hypre? ( mpi )"
 
 BDEPEND="virtual/pkgconfig"
@@ -29,11 +29,20 @@ RDEPEND="
 "
 DEPEND="${RDEPEND}"
 
+PATCHES=( "${FILESDIR}"/${P}-fix-license-install-path.patch )
+
 pkg_setup() {
 	if [[ ${MERGE_TYPE} != binary ]] && use openmp && [[ $(tc-getCC) == *gcc ]] && ! tc-has-openmp; then
 		ewarn "OpenMP is not available in your current selected gcc"
 		die "need openmp capable gcc"
 	fi
+}
+
+src_prepare() {
+	# bug #707240
+	append-cflags -fcommon
+
+	cmake_src_prepare
 }
 
 src_configure() {
@@ -43,23 +52,23 @@ src_configure() {
 		-DCXX_ENABLE="$(usex cxx)"
 		-DFCMIX_ENABLE="$(usex fortran)"
 		-DF90_ENABLE="$(usex fortran)"
-		-DENABLE_HYPRE="$(usex hypre)"
+		-DHYPRE_ENABLE="$(usex hypre)"
 		-DHYPRE_INCLUDE_DIR="${EPREFIX}/usr/include/hypre"
-		-DENABLE_KLU="$(usex sparse)"
-		-DENABLE_LAPACK="$(usex lapack)"
-		-DENABLE_MPI="$(usex mpi)"
-		-DENABLE_OPENMP="$(usex openmp)"
-		-DENABLE_PTHREAD="$(usex threads)"
+		-DKLU_ENABLE="$(usex sparse)"
+		-DLAPACK_ENABLE="$(usex lapack)"
+		-DMPI_ENABLE="$(usex mpi)"
+		-DOPENMP_ENABLE="$(usex openmp)"
+		-DPTHREAD_ENABLE="$(usex threads)"
+		-DSUPERLUMT_ENABLE="$(usex superlumt)"
+		-DSUPERLUMT_INCLUDE_DIR="${EPREFIX}/usr/include/superlu_mt"
+		-DSUPERLUMT_LIBRARY="-lsuperlu_mt"
 		-DENABLE_CUDA="$(usex cuda)"
 		-DENABLE_HIP="$(usex hip)"
 		-DENABLE_RAJA="$(usex raja)"
 		-DENABLE_SYCL="$(usex sycl)"
-		-DENABLE_SUPERLUMT="$(usex superlumt)"
-		-DSUPERLUMT_INCLUDE_DIR="${EPREFIX}/usr/include/superlu_mt"
-		-DSUPERLUMT_LIBRARY="-lsuperlu_mt"
 		-DEXAMPLES_ENABLE="$(usex examples)"
 		-DEXAMPLES_INSTALL=ON
-		-DEXAMPLES_INSTALL_PATH="/usr/share/doc/${PF}/examples"
+		-DEXAMPLES_INSTALL_PATH="${EPREFIX}/usr/share/doc/${PF}/examples"
 		-DUSE_GENERIC_MATH=ON
 	)
 	use sparse && mycmakeargs+=( -DKLU_LIBRARY="${EPREFIX}/usr/$(get_libdir)/libklu.so" )
