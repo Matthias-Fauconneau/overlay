@@ -17,7 +17,7 @@ SRC_URI="https://github.com/LLNL/${PN}/releases/download/v${PV}/${P}.tar.gz"
 LICENSE="BSD"
 SLOT="0/$(ver_cut 1)"
 KEYWORDS="~amd64 ~arm ~arm64 ~ppc ~ppc64 ~x86 ~amd64-linux ~x86-linux"
-IUSE="cxx doc examples fortran hypre lapack mpi openmp sparse static-libs superlumt threads sycl"
+IUSE="cxx doc examples fortran hypre lapack mpi openmp sparse static-libs superlumt threads cuda hip sycl raja"
 REQUIRED_USE="hypre? ( mpi )"
 
 BDEPEND="virtual/pkgconfig"

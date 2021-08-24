@@ -5,7 +5,7 @@ EAPI=7
 
 CMAKE_ECLASS=cmake
 PYTHON_COMPAT=( python{3_9,3_10} )
-LLVM_MAX_SLOT=12
+LLVM_MAX_SLOT=11
 
 inherit cmake flag-o-matic llvm python-any-r1
 
@@ -46,7 +46,7 @@ find_best_llvm_slot() {
 	local candidate_slot
 
 	# Select the same slot as the best opencl-clang
-	local ocl_clang_ver="$(best_version -d dev-libs/opencl-clang:=)"
+	local ocl_clang_ver="dev-libs/opencl-clang-11.1.0_pre20201222" #"$(best_version -d <=dev-libs/opencl-clang-${LLVM_MAX_SLOT}.9999:=)"
 	einfo "Selecting ${ocl_clang_ver}"
 	candidate_slot=$(ver_cut 5 ${ocl_clang_ver})
 
