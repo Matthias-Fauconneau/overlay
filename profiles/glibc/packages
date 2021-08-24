@@ -1,0 +1,16 @@
+-*app-misc/pax-utils
+-*sys-apps/sandbox
+-*sys-apps/man-pages
+-*sys-devel/gcc
+-*sys-libs/glibc
+-*virtual/libc
+-*sys-apps/busybox
+-*sys-apps/shadow
+-*sys-apps/util-linux
+-*virtual/libudev
+-*virtual/ssh
+-*sys-apps/kbd
+-*sys-process/procps
+-*sys-apps/grep
+-*sys-apps/ed
+-*virtual/man
